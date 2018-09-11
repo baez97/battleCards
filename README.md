@@ -1,2 +1,3 @@
 # prueba1
-Primer repositorio 
+
+Ejemplo de respositorio para aprender a utilizar Git
