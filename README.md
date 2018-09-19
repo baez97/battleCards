@@ -1,3 +1,3 @@
-# prueba1
+# Arquitectura base del proyecto 2018
 
-Ejemplo de respositorio para aprender a utilizar Git
+Este repositorio tiene los elementos de la arquitectura base del proyecto 2018
