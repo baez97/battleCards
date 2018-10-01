@@ -4,9 +4,9 @@ var host=config.host;
 var port=config.port;
 var exp=require("express");
 var app=exp(); 
-var modelo=require("servidor/modelo.js")
+var modelo=require("./servidor/modelo.js")
 
-var juego=new Juego();
+var juego=new modelo.Juego();
 
 app.get("/",function(request,response){
 	response.send("hola");

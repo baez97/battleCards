@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jgallud/battleCards#readme",
   "dependencies": {
+    "express": "^4.16.3",
     "jasmine-node": "^1.16.2"
   }
 }
