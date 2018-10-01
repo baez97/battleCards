@@ -9,7 +9,8 @@ var modelo=require("./servidor/modelo.js")
 var juego=new modelo.Juego();
 
 app.get("/",function(request,response){
-	response.send("hola");
+	var json={};
+	response.send(json);
 });
 
 
