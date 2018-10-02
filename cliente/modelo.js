@@ -1,8 +1,9 @@
 function Juego(){
 	this.cartas=[];
 	this.usuarios=[];
+	this.tablero=undefined;
 	this.agregarCarta=function(carta){
-	this.cartas.push(carta);
+		this.cartas.push(carta);
 	}
 	this.agregarUsuario=function(usuario){
 		usuario.mazo=this.cartas;
@@ -23,7 +24,40 @@ function Juego(){
 			this.cartas.push(new Carta("Esbirro"+i, 2, 2,1));
 		}
 	}
+	this.agregarTablero=function(tablero){
+		this.tablero=tablero;
+	}
+	//aquí se construye el Juego
 	this.crearColeccion();
+	this.agregarTablero(new Tablero());
+}
+
+function Tablero(){
+	this.zonas=[];
+	this.agregarZona=function(zona){
+		this.zonas.push(zona);
+	}
+	this.crearZonas=function(){
+		this.agregarZona(new Zona("arriba"));
+		this.agregarZona(new Zona("abajo"));
+	}
+	this.crearZonas();
+}
+
+function Zona(nombre){
+	this.nombre=nombre;
+	this.ataque=[];
+	this.mano=[];
+	this.mazo=[];
+	this.agregarAtaque=function(carta){
+		this.ataque.push(carta);
+	}
+	this.agregarMano=function(carta){
+		this.mano.push(carta);
+	}
+	this.agregarMazo=function(mazo){
+		this.mazo=mazo;
+	}
 }
 
 function Usuario(nombre){
@@ -31,6 +65,10 @@ function Usuario(nombre){
 	this.juego=undefined;
 	this.mazo=[];
 	this.mano=[];
+	this.zona=undefined;
+	this.agregarZona=function(zona){
+		this.zona=zona;
+	}
 }
 
 function Carta(vidas,ataque,nombre,coste){
