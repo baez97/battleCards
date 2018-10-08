@@ -145,7 +145,7 @@ function Usuario(nombre){
 		this.cogerCarta();
 	}
 	this.cogerCarta=function(){
-		return this.mazo.filter(function(each){
+		return this.mazo.find(function(each){
 			return each.posicion=="mazo";
 		});
 	}
