@@ -6,23 +6,25 @@ function Juego(){
 		this.cartas.push(carta);
 	}
 	this.agregarUsuario=function(usuario){
-		usuario.mazo=this.cartas;
+		usuario.mazo=this.crearColeccion();
 		usuario.juego=this;
 		this.usuarios.push(usuario);
 	}
 	this.crearColeccion=function(){
+		var mazo=[];
 		//10 ataque 5 coste 3 vida 5
 		for (var i=0;i<10;i++){
-			this.cartas.push(new Carta("Dragon"+i, 5, 5,3));
+			mazo.push(new Carta("Dragon"+i, 5, 5,3));
 		}
 		//10 ataque 3 coste 2 vida 3
 		for (var i=0;i<10;i++){
-			this.cartas.push(new Carta("Guerrero"+i, 3, 3,2));
+			mazo.push(new Carta("Guerrero"+i, 3, 3,2));
 		}
 		//10 ataque 2 coste 1 vida 2
 		for (var i=0;i<10;i++){
-			this.cartas.push(new Carta("Esbirro"+i, 2, 2,1));
+			mazo.push(new Carta("Esbirro"+i, 2, 2,1));
 		}
+		return mazo;
 	}
 	this.agregarPartida=function(partida){
 		this.partidas.push(partida);
@@ -40,18 +42,39 @@ function Juego(){
 		}
 	}
 	//aquí se construye el Juego
-	this.crearColeccion();
+	//this.crearColeccion();
 }
 
 function Partida(nombre){
 	this.nombre=nombre;
+	this.usuariosPartida=[];
 	this.tablero=undefined;
 	this.crearTablero=function(){
 		this.tablero=new Tablero();
 	}
 	this.asignarUsuario=function(usuario){
 		usuario.asignarPartida(this);
+		this.usuariosPartida.push(usuario);
 		this.tablero.asignarUsuario(usuario);
+		this.comprobarInicio();
+	}
+	this.comprobarInicio=function(){
+		if (this.usuariosPartida.length==2){
+			this.turnoInicial();
+		}
+	}
+	this.turnoInicial=function(){
+		var num=Math.round(Math.random());
+		this.usuariosPartida[num].esMiTurno();
+	}
+	this.cambiarTurno=function(){
+		if (this.usuariosPartida[0].turno){
+			this.usuariosPartida[0].turno=false;
+			this.usuariosPartida[1].esMiTurno()
+		}else{
+			this.usuariosPartida[1].turno=false;
+			this.usuariosPartida[0].esMiTurno();
+		}
 	}
 	this.crearTablero();
 }
@@ -99,6 +122,7 @@ function Usuario(nombre){
 	this.juego=undefined;
 	this.mazo=[];
 	this.mano=[];
+	this.turno=false;
 	this.zona=undefined;
 	this.partida=undefined;
 	this.asignarPartida=function(partida){
@@ -113,6 +137,18 @@ function Usuario(nombre){
 	this.eligePartida=function(nombre){
 		this.juego.asignarPartida(nombre,this);
 	}
+	this.pasarTurno=function(){
+		this.partida.cambiarTurno();
+	}
+	this.esMiTurno=function(){
+		this.turno=true;
+		this.cogerCarta();
+	}
+	this.cogerCarta=function(){
+		return this.mazo.filter(function(each){
+			return each.posicion=="mazo";
+		});
+	}
 }
 
 function Carta(vidas,ataque,nombre,coste){
@@ -120,4 +156,5 @@ function Carta(vidas,ataque,nombre,coste){
 	this.ataque=ataque;
 	this.nombre=nombre;
 	this.coste=coste;
+	this.posicion="mazo";
 }
