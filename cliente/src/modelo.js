@@ -6,7 +6,7 @@ function Juego(){
 		this.cartas.push(carta);
 	}
 	this.agregarUsuario=function(usuario){
-		usuario.mazo=this.crearColeccion();
+		usuario.mazo=_.shuffle(this.crearColeccion());
 		usuario.juego=this;
 		this.usuarios.push(usuario);
 	}
@@ -61,11 +61,18 @@ function Partida(nombre){
 	this.comprobarInicio=function(){
 		if (this.usuariosPartida.length==2){
 			this.turnoInicial();
+			this.asignarManoInicial();
+		}
+	}
+	this.asignarManoInicial=function(){
+		for(var i=0;i<this.usuariosPartida.length;i++){
+			this.usuariosPartida[i].manoInicial();
 		}
 	}
 	this.turnoInicial=function(){
 		var num=Math.round(Math.random());
 		this.usuariosPartida[num].esMiTurno();
+
 	}
 	this.cambiarTurno=function(){
 		if (this.usuariosPartida[0].turno){
@@ -120,11 +127,15 @@ function Zona(nombre){
 function Usuario(nombre){
 	this.nombre=nombre;
 	this.juego=undefined;
+	this.vidas=20;
 	this.mazo=[];
-	this.mano=[];
+	//this.mano=[];
+	//this.ataque=[];
+	this.elixir=1;
 	this.turno=false;
 	this.zona=undefined;
 	this.partida=undefined;
+	this.consumido=0;
 	this.asignarPartida=function(partida){
 		this.partida=partida;
 	}
@@ -143,11 +154,39 @@ function Usuario(nombre){
 	this.esMiTurno=function(){
 		this.turno=true;
 		this.cogerCarta();
+		this.elixir=this.consumido+1;
+		this.consumido=0;
 	}
 	this.cogerCarta=function(){
-		return this.mazo.find(function(each){
+		var carta;
+		carta= this.mazo.find(function(each){
 			return each.posicion=="mazo";
 		});
+		carta.posicion="mano";
+	}
+	this.jugarCarta=function(carta){
+		if (this.elixir>=carta.coste){
+			carta.posicion="ataque";
+			this.elixir=this.elixir-carta.coste;
+			this.consumido=this.consumido+carta.coste;
+		}
+	}
+	this.ataque=function(carta,objetivo){
+		objetivo.esAtacado(carta);
+	}
+	this.esAtacado=function(carta){
+		this.vidas=this.vidas-carta.ataque;
+		this.comprobarVidas();
+	}
+	this.comprobarVidas=function(){
+		if (this.vidas<=0){
+			this.juego.fin();
+		}
+	}
+	this.manoInicial=function(){
+		for(var i=0;i<5;i++){
+			this.cogerCarta();
+		}
 	}
 }
 
@@ -157,4 +196,14 @@ function Carta(vidas,ataque,nombre,coste){
 	this.nombre=nombre;
 	this.coste=coste;
 	this.posicion="mazo";
+	this.esAtacado=function(carta){
+		this.vidas=this.vidas-carta.ataque;
+		this.comprobarVidas();
+		carta.comprobarVidas();
+	}
+	this.comprobarVidas=function(){
+		if (this.vidas<=0){
+			this.posicion="cementerio";
+		}
+	}
 }
