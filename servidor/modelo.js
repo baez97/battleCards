@@ -65,15 +65,15 @@ function Partida(nombre){
 	}
 	this.turnoInicial=function(){
 		var num=Math.round(Math.random());
-		this.usuariosPartida[num].turno=true;
+		this.usuariosPartida[num].esMiTurno();
 	}
 	this.cambiarTurno=function(){
 		if (this.usuariosPartida[0].turno){
 			this.usuariosPartida[0].turno=false;
-			this.usuariosPartida[1].turno=true;
+			this.usuariosPartida[1].esMiTurno();
 		}else{
 			this.usuariosPartida[1].turno=false;
-			this.usuariosPartida[0].turno=true;
+			this.usuariosPartida[0].esMiTurno();
 		}
 	}
 	this.crearTablero();
@@ -140,6 +140,15 @@ function Usuario(nombre){
 	this.pasarTurno=function(){
 		this.partida.cambiarTurno();
 	}
+	this.esMiTurno=function(){
+		this.turno=true;
+		this.cogerCarta();
+	}
+	this.cogerCarta=function(){
+		return this.mazo.find(function(each){
+			return each.posicion=="mazo";
+		});
+	}
 }
 
 function Carta(vidas,ataque,nombre,coste){
@@ -149,7 +158,6 @@ function Carta(vidas,ataque,nombre,coste){
 	this.coste=coste;
 	this.posicion="mazo";
 }
-
 
 
 module.exports.Juego=Juego;
