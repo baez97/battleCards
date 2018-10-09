@@ -70,7 +70,7 @@ function Partida(nombre){
 	this.cambiarTurno=function(){
 		if (this.usuariosPartida[0].turno){
 			this.usuariosPartida[0].turno=false;
-			this.usuariosPartida[1].esMiTurno()
+			this.usuariosPartida[1].esMiTurno();
 		}else{
 			this.usuariosPartida[1].turno=false;
 			this.usuariosPartida[0].esMiTurno();
