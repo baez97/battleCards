@@ -77,13 +77,16 @@ function Partida(nombre){
 
 	}
 	this.cambiarTurno=function(){
-		if (this.usuariosPartida[0].turno){
-			this.usuariosPartida[0].turno=false;
-			this.usuariosPartida[1].esMiTurno();
-		}else{
-			this.usuariosPartida[1].turno=false;
-			this.usuariosPartida[0].esMiTurno();
+		for(var i=0;i<this.usuariosPartida.length;i++){
+			this.usuariosPartida[i].cambiarTurno();
 		}
+		// if (this.usuariosPartida[0].turno){
+		// 	this.usuariosPartida[0].turno=false;
+		// 	this.usuariosPartida[1].esMiTurno();
+		// }else{
+		// 	this.usuariosPartida[1].turno=false;
+		// 	this.usuariosPartida[0].esMiTurno();
+		// }
 	}
 	this.crearTablero();
 }
@@ -126,6 +129,43 @@ function Zona(nombre){
 	}
 }
 
+function MiTurno(){
+	this.pasarTurno=function(usr){
+		usr.partida.cambiarTurno();
+	}
+	this.jugarCarta=function(usr,carta){
+		usr.puedeJugarCarta(carta);
+	}
+	this.cambiarTurno=function(usr){
+		usr.turno=new NoMiTurno();
+	}
+	this.meToca=function(){
+		return true;
+	}
+}
+
+function NoMiTurno(){
+	this.esMiTurno=function(usr){
+		usr.turno=new MiTurno();
+		usr.cogerCarta();
+		usr.elixir=usr.consumido+1;
+		usr.consumido=0;
+	}
+	this.pasarTurno=function(usr){
+		console.log("No se puede pasar el turno si no se tiene");
+	}
+	this.jugarCarta=function(carta,usr){
+		console.log("No es tu turno");
+	}
+	this.cambiarTurno=function(usr){
+		usr.turno=new MiTurno();
+		this.esMiTurno(usr);
+	}
+	this.meToca=function(){
+		return false;
+	}
+}
+
 function Usuario(nombre){
 	this.nombre=nombre;
 	this.juego=undefined;
@@ -134,7 +174,7 @@ function Usuario(nombre){
 	//this.mano=[];
 	//this.ataque=[];
 	this.elixir=1;
-	this.turno=false;
+	this.turno=new NoMiTurno();
 	this.zona=undefined;
 	this.partida=undefined;
 	this.consumido=0;
@@ -150,14 +190,19 @@ function Usuario(nombre){
 	this.eligePartida=function(nombre){
 		this.juego.asignarPartida(nombre,this);
 	}
+	this.cambiarTurno=function(){
+		this.turno.cambiarTurno(this);
+	}
 	this.pasarTurno=function(){
-		this.partida.cambiarTurno();
+		//this.partida.cambiarTurno();
+		this.turno.pasarTurno(this);
 	}
 	this.esMiTurno=function(){
-		this.turno=true;
-		this.cogerCarta();
-		this.elixir=this.consumido+1;
-		this.consumido=0;
+		this.turno.esMiTurno(this);
+		// this.turno=true;
+		// this.cogerCarta();
+		// this.elixir=this.consumido+1;
+		// this.consumido=0;
 	}
 	this.cogerCarta=function(){
 		var carta;
@@ -167,11 +212,16 @@ function Usuario(nombre){
 		carta.posicion="mano";
 	}
 	this.jugarCarta=function(carta){
+		this.turno.jugarCarta(this,carta);
+	}
+	this.puedeJugarCarta=function(carta){
 		if (this.elixir>=carta.coste){
 			carta.posicion="ataque";
 			this.elixir=this.elixir-carta.coste;
 			this.consumido=this.consumido+carta.coste;
 		}
+		else
+			console.log("No tienes suficiente elixir");
 	}
 	this.ataque=function(carta,objetivo){
 		objetivo.esAtacado(carta);
@@ -214,6 +264,7 @@ function Carta(vidas,ataque,nombre,coste){
 		}
 	}
 }
-
 module.exports.Juego=Juego;
 module.exports.Usuario=Usuario;
+module.exports.MiTurno=MiTurno;
+module.exports.NoMiTurno=NoMiTurno;

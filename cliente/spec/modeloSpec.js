@@ -53,29 +53,29 @@ describe("El juego de las cartas...", function() {
 	    expect(juego.usuarios[0].zona.nombre).toEqual("arriba");
 	    expect(juego.usuarios[1].zona.nombre).toEqual("abajo");
 	    expect(usr1.partida.usuariosPartida.length).toEqual(2);
-	    if (usr1.turno){
-	    	expect(usr2.turno).toBe(false);
+	    if (usr1.turno.meToca()){
+	    	expect(usr2.turno.meToca()).toBe(false);
 	    }
 	    else{
-	    	expect(usr2.turno).toBe(true);
+	    	expect(usr2.turno.meToca()).toBe(true);
 	    }
   	});
 
    it("Comprobar que funciona pasar turno",function(){
-    	usr1.turno=true;
-    	usr2.turno=false;
+    	usr1.turno=new MiTurno();
+    	usr2.turno=new NoMiTurno();
     	usr1.pasarTurno();
-    	expect(usr1.turno).toEqual(false);
-    	expect(usr2.turno).toEqual(true);
+    	expect(usr1.turno.meToca()).toEqual(false);
+    	expect(usr2.turno.meToca()).toEqual(true);
    });
 
    it("Al jugar una carta, la carta pasa a la zona de ataque y se decrementa el elixir en 1",function(){
       //Forzamos el turno para el usr1
-      usr1.turno=true;
-      usr2.turno=false;
+      usr1.turno=new MiTurno();
+      usr2.turno=new NoMiTurno();
       //Localizamos una carta de coste 1
       var carta=usr1.localizarCarta(1);
-      if (carta){
+      if (carta!=undefined){
         usr1.jugarCarta(carta);
         expect(usr1.elixir).toEqual(0);
         expect(usr1.consumido).toEqual(1);
