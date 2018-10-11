@@ -190,6 +190,11 @@ function Usuario(nombre){
 			this.cogerCarta();
 		}
 	}
+	this.localizarCarta=function(coste){
+		return this.mazo.find(function(each){
+			return each.posicion=="mano" && each.coste==coste;
+		});
+	}
 }
 
 function Carta(vidas,ataque,nombre,coste){

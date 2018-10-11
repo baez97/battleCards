@@ -69,10 +69,17 @@ describe("El juego de las cartas...", function() {
     	expect(usr2.turno).toEqual(true);
    });
 
-   describe("Pruebas de la partida prueba",function(){
-   		beforeEach(function(){
- 			
-   		});
-
+   it("Al jugar una carta, la carta pasa a la zona de ataque y se decrementa el elixir en 1",function(){
+      //Forzamos el turno para el usr1
+      usr1.turno=true;
+      usr2.turno=false;
+      //Localizamos una carta de coste 1
+      var carta=usr1.localizarCarta(1);
+      if (carta){
+        usr1.jugarCarta(carta);
+        expect(usr1.elixir).toEqual(0);
+        expect(usr1.consumido).toEqual(1);
+        expect(carta.posicion).toEqual("ataque");
+      }
    });
 });
