@@ -136,18 +136,22 @@ function MiTurno(){
 	}
 	this.cambiarTurno=function(usr){
 		usr.turno=new NoMiTurno();
+		usr.elixir=usr.consumido+1;
+		usr.consumido=0;
 	}
 	this.meToca=function(){
 		return true;
+	}
+	this.esMiTurno=function(usr){
+		//usr.turno=new MiTurno();
+		usr.cogerCarta();
 	}
 }
 
 function NoMiTurno(){
 	this.esMiTurno=function(usr){
+		console.log("Ahora te toca");
 		usr.turno=new MiTurno();
-		usr.cogerCarta();
-		usr.elixir=usr.consumido+1;
-		usr.consumido=0;
 	}
 	this.pasarTurno=function(usr){
 		console.log("No se puede pasar el turno si no se tiene");
@@ -156,7 +160,7 @@ function NoMiTurno(){
 		console.log("No es tu turno");
 	}
 	this.cambiarTurno=function(usr){
-		usr.turno=new MiTurno();
+		//usr.turno=new MiTurno();
 		this.esMiTurno(usr);
 	}
 	this.meToca=function(){
@@ -245,7 +249,7 @@ function Usuario(nombre){
 	}
 }
 
-function Carta(vidas,ataque,nombre,coste){
+function Carta(nombre,vidas,ataque,coste){
 	this.vidas=vidas;
 	this.ataque=ataque;
 	this.nombre=nombre;
@@ -253,6 +257,7 @@ function Carta(vidas,ataque,nombre,coste){
 	this.posicion="mazo";
 	this.esAtacado=function(carta){
 		this.vidas=this.vidas-carta.ataque;
+		carta.vidas=carta.vidas-this.ataque;
 		this.comprobarVidas();
 		carta.comprobarVidas();
 	}
