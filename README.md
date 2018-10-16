@@ -15,3 +15,11 @@ Diseño del juego BattelCards:
 - Cada jugador tiene un mazo (colección de cartas), mano (hasta 10 cartas), y una zona de ataque
 
 Primer diseño de la arquitectura SaaS, definir la estructura de carpetas de la solución
+
+### Sprint 3: Implementar el API REST de BattleCards
+- Agregar usuario
+- Crear partida
+- Elegir partida
+- Jugar carta
+- Atacar
+- Ver resultados
