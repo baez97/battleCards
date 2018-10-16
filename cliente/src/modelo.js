@@ -9,6 +9,7 @@ function Juego(){
 		usuario.mazo=_.shuffle(this.crearColeccion());
 		usuario.juego=this;
 		this.usuarios.push(usuario);
+		usuario.id=this.usuarios.length-1;
 	}
 	this.crearColeccion=function(){
 		var mazo=[];
@@ -262,6 +263,11 @@ function Usuario(nombre){
 		return this.mazo.find(function(each){
 			return each.posicion=="mano" && each.coste==coste;
 		});
+	}
+	this.obtenerUnaCarta=function(){
+		return this.mazo.find(function(each){
+			return each.posicion=="mano";
+		});	
 	}
 	this.obtenerCartasAtaque=function(){
 		return this.mazo.filter(function(each){
