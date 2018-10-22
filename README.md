@@ -1,4 +1,4 @@
-# Proyecto 2018: BattleCards
+# Proyecto 2018: BattleCards [![Build Status](https://travis-ci.org/baez97/battleCards.svg?branch=master)](https://travis-ci.org/baez97/battleCards)
 
 Este repositorio tiene los elementos de la arquitectura base del proyecto 2018: BattleCards
 
