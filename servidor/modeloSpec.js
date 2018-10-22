@@ -190,3 +190,52 @@ it("Un turno completo con ataque", function(){
     });
 });
 
+describe("Las fases de la partida...", function() {
+  var juego;
+  var usr1,usr2;
+  var partida;
+
+  beforeEach(function() {
+    juego = new modelo.Juego();
+    usr1  = new modelo.Usuario("Bart");
+    usr2  = new modelo.Usuario("Lisa");
+    usr3 = new modelo.Usuario("Maggie");
+
+    juego.agregarUsuario(usr1);
+    juego.agregarUsuario(usr2);
+    juego.agregarUsuario(usr3);
+
+    usr1.crearPartida("lucha-a-muerte");
+    partida = juego.obtenerPartida("lucha-a-muerte");
+  });
+  
+  it("La partida empieza en fase inicial", function() {
+    expect(partida.fase.nombre).toEqual("inicial");
+  });
+  
+  it("La partida comienza cuando se le asignan dos usuarios", function() {
+    usr2.eligePartida("lucha-a-muerte");
+  
+    expect(partida.fase.nombre).toEqual("jugando");
+  });
+
+  it("La partida entra en fase final cuando acaba", function() {
+    partida.finPartida();
+
+    expect(partida.fase.nombre).toEqual("final")
+  });
+
+  it("Solo se puede asignar usuario en la fase Inicial", function() {
+    usr2.eligePartida("lucha-a-muerte");
+    expect(partida.usuariosPartida.length).toEqual(2);
+
+    usr3.eligePartida("lucha-a-muerte");
+    
+    partida.finPartida();
+    usr3.eligePartida("lucha-a-muerte");
+    
+    expect(partida.usuariosPartida.length).toEqual(2);
+  });
+
+});
+
