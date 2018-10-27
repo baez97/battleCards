@@ -266,7 +266,7 @@ function Usuario(nombre, id){
 		this.zona=zona;
 	}
 	this.crearPartida=function(nombre){
-		this.juego.crearPartida(nombre,this);
+		return this.juego.crearPartida(nombre,this);
 	}
 	this.eligePartida=function(nombre){
 		return this.juego.asignarPartida(nombre,this);

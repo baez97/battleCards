@@ -9,7 +9,7 @@ var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var modelo=require("./servidor/modelo.js");
 var comSrv = require("./servidor/comSrv.js");
-var com = comSrv.ComSrv();
+var com = new comSrv.ComSrv();
 
 var juego=new modelo.Juego();
 
@@ -18,10 +18,11 @@ app.use(exp.static(__dirname + '/'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get("/",function(request,response){
-	var json={};
-	response.send(json);
-});
+app.get('/', function(request, response) {
+	var contenido=fs.readFileSync("./cliente/index.html"); 
+	response.setHeader("Content-type","text/html");
+	response.send(contenido); 
+	});
 
 app.get("/agregarUsuario/:nombre",function(request,response) {
 	const nombre = request.params.nombre;
@@ -152,3 +153,5 @@ app.get("/cambiarTurno/:usrid/", function(request, response) {
 server.listen(app.get('port'), function () {
 	console.log('Node app is running on port', app.get('port'));
 });
+
+com.lanzarSocketSrv(io,juego);

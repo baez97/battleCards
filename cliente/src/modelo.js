@@ -44,14 +44,18 @@ function Juego(){
 		var partida=new Partida(nombre);
 		this.agregarPartida(partida);
 		partida.asignarUsuario(usuario);
+		partida.id = this.partidas.length - 1;
+		return partida.id;
 	}	
 	this.asignarPartida=function(nombre, usuario){
 		console.log(usuario); 
 		for (var i=0;i<this.partidas.length;i++){
-			if (this.partidas[i].nombre==nombre){
+			if ( this.partidas[i].nombre==nombre && this.partidas[i].fase.nombre=="inicial" ){
 				this.partidas[i].asignarUsuario(usuario);
+				return i;
 			}
 		}
+		return -1;
 	}
 
 	this.obtenerPartida = function(nombre) {
@@ -59,11 +63,16 @@ function Juego(){
 			return partida.nombre == nombre;
 		});
 	}
+
+	this.obtenerPartidas = function() {
+		return this.partidas;
+	}
 	//aquí se construye el Juego
 	//this.crearColeccion();
 }
 
-function Partida(nombre){
+function Partida(nombre) {
+	this.id = undefined;
 	this.nombre=nombre;
 	this.usuariosPartida=[];
 	this.tablero=undefined;
@@ -257,10 +266,10 @@ function Usuario(nombre, id){
 		this.zona=zona;
 	}
 	this.crearPartida=function(nombre){
-		this.juego.crearPartida(nombre,this);
+		return this.juego.crearPartida(nombre,this);
 	}
 	this.eligePartida=function(nombre){
-		this.juego.asignarPartida(nombre,this);
+		return this.juego.asignarPartida(nombre,this);
 	}
 	this.cambiarTurno=function(){
 		this.turno.cambiarTurno(this);
@@ -376,6 +385,14 @@ function Usuario(nombre, id){
 		return this.mazo.filter(function(each){
 			return each.posicion=="mano";
 		});
+	}
+
+	this.obtenerCartaMano = function(id) {
+		if ( this.mazo[id].posicion == "mano" ) {
+			return this.mazo[id];
+		} else {
+			return -1;
+		}
 	}
 
 	this.obtenerRestantes = function(posicion) {
