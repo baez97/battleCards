@@ -12,6 +12,19 @@ function Juego(){
 		return partida.verResultado();
 	}
 
+	this.comprobarCartaEnMano = function(usrid, nombreCarta) {
+		var usr = this.usuarios[usrid];
+		if ( usr ) {
+			var cartas = usr.obtenerCartaMano();
+			cartas.forEach( carta => {
+				if ( carta.nombre == nombreCarta ) {
+					return true;
+				}
+			});
+		}
+		return false;
+	}
+
 	this.agregarCarta=function(carta){
 		this.cartas.push(carta);
 	}
@@ -77,6 +90,17 @@ function Partida(nombre) {
 	this.usuariosPartida=[];
 	this.tablero=undefined;
 	this.fase = new Inicial();
+
+	this.obtenerRival = function(usuario) {
+		var rival;
+		this.usuariosPartida.forEach( usr => {
+			if ( usr.id != usuario.id ) {
+				rival = usr;
+			}
+		});
+		
+		return rival;
+	};
 
 	this.verResultado = function() {
 		var [usr1, usr2] = this.usuariosPartida;
@@ -362,6 +386,13 @@ function Usuario(nombre, id){
 			return each.posicion=="ataque";
 		});
 	}
+
+	this.obtenerCartaAtaqueNombre = function(nombre) {
+		return this.mazo.find(function(each){
+			return each.posicion=="ataque" && each.nombre == nombre;
+		});
+	}
+
 	this.comprobarCartasAtaque=function(){
 		var carta;
 		var cartasAtaque;
@@ -387,12 +418,10 @@ function Usuario(nombre, id){
 		});
 	}
 
-	this.obtenerCartaMano = function(id) {
-		if ( this.mazo[id].posicion == "mano" ) {
-			return this.mazo[id];
-		} else {
-			return -1;
-		}
+	this.obtenerCartaMano = function(nombre) {
+		return this.mazo.find( carta => {
+			return carta.nombre == nombre;
+		});
 	}
 
 	this.obtenerRestantes = function(posicion) {
@@ -414,9 +443,43 @@ function Usuario(nombre, id){
 	this.descartarCarta=function(carta){
 		carta.posicion="cementerio";
 	}
-	
-}
 
+	this.meToca = function() {
+		return this.turno.meToca();
+	}
+
+	this.obtenerDatosRival=function(){
+    	var rival = this.partida.obtenerRival(this);
+		var json  = { "elixir" : rival.elixir,
+					  "cartas" : rival.obtenerCartasAtaque(),
+					  "vidas"  : rival.vidas };
+    	return json;
+	}
+	
+	this.rivalTeToca = function() {
+		var rival = this.partida.obtenerRival(this);
+		return rival.meToca();
+	}
+
+	this.ataqueConNombre = function(idCarta1, idCarta2) {
+		var atacante = this.obtenerCartaAtaqueNombre(idCarta1);
+		var rival    = this.partida.obtenerRival(this);
+		var objetivo = rival.obtenerCartaAtaqueNombre(idCarta2);
+
+		this.ataque(atacante, objetivo);
+
+		return { "carta": atacante, "objetivo": objetivo};
+	}
+
+	this.ataqueRivalConNombre = function( idCarta ) {
+		var carta = this.obtenerCartaAtaqueNombre(idCarta);
+		var rival = this.partida.obtenerRival(this);
+		this.ataque(carta, rival);
+
+		var json = { "carta": carta, "vidas": rival.vidas };
+		return json;
+	}
+}
 
 function Carta(nombre,vidas,ataque,coste){
 	this.vidas=vidas;

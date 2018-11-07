@@ -414,6 +414,10 @@ function Usuario(nombre, id){
 	this.descartarCarta=function(carta){
 		carta.posicion="cementerio";
 	}
+
+	this.meToca = function() {
+		return this.turno.meToca();
+	}
 	
 }
 

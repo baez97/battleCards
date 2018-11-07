@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', function(request, response) {
-	var contenido=fs.readFileSync("./cliente/index.html"); 
+	var contenido=fs.readFileSync("./cliente/index-bs.html"); 
 	response.setHeader("Content-type","text/html");
 	response.send(contenido); 
 	});

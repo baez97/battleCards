@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <script src="cliente/src/clienteCom.js"></script>
+	<script src="cliente/src/clienteRest.js"></script>
+    <script src="cliente/src/controlWeb.js"></script>
+</head>
+
+<body>
+
+    <div class="jumbotron text-center">
+        <h1>Battle Cards Game</h1>
+        <p>Juego de cartas online</p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>Iniciar sesión</h3>
+                <div id="inicio"></div>
+            </div>
+            <div class="col-sm-6">
+                    <h3>Partidas</h3>
+                <div id="listaPartidas"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+		rest = new ClienteRest();
+        com  = new ClienteCom();
+        // usr = new ClienteUsuario();
+        mostrarFormularioNombre();
+	</script>
+</body>
+
+</html>
