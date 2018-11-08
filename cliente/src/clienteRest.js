@@ -13,6 +13,7 @@ function ClienteRest() {
             success: function (data) {
                 console.log("Usuario agregado con id: " + data.usr)
                 com.ini(data.usr);
+                cli.obtenerPartidas();
                 mostrarCrearPartida();
             },
             contentType: 'application/json',

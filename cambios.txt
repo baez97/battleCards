@@ -1,0 +1,15 @@
+Añadir margen a los botones:
+    <style>
+        .btn {
+            margin-top: 10px;
+        }
+    </style>
+
+Mostrar partidas nada más iniciar sesión:
+
+    cli.obtenerPartidas(); en el método agregarUsuario de clienteRest
+
+Cambiar el título de Iniciar Sesión por el de Crear Partida (En el onClick de mostrarFormularioNombre):
+
+    $('#hInicioSesion').text("Crear partida");
+    
